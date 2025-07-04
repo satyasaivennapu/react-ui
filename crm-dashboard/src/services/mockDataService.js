@@ -1,4 +1,5 @@
 // Simulates API calls with a short delay
+
 const simulateApiCall = (data, delay = 500) => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -70,7 +71,10 @@ export const getExpenseData = () => {
   return simulateApiCall(data);
 };
 
+
 // --- Generic Table Data ---
+// This can be expanded for each specific table if needed.
+// For now, a generic function.
 
 const generateGenericTableData = (columns, numRows) => {
   const data = [];
@@ -87,15 +91,16 @@ const generateGenericTableData = (columns, numRows) => {
     data.push(row);
   }
   return data;
-};
+}
 
 export const getLocationsData = () => {
   const columns = ['ID', 'Name', 'Address', 'City', 'Status'];
   return simulateApiCall(generateGenericTableData(columns, 8));
-};
+}
 
 export const getLocationTypesData = () => {
   const columns = ['ID', 'Type Name', 'Description', 'Created At'];
+  // Example of slightly more specific data for one table
   const data = [
     { id: 'LT001', type_name: 'Warehouse', description: 'Storage and distribution facility', created_at: '2023-01-15' },
     { id: 'LT002', type_name: 'Office', description: 'Administrative and business operations', created_at: '2023-02-20' },
@@ -103,25 +108,15 @@ export const getLocationTypesData = () => {
     { id: 'LT004', type_name: 'Showroom', description: 'Product display area', created_at: '2023-04-05' },
   ];
   return simulateApiCall(data);
-};
+}
 
-// --- NEW LIVE API CALL ---
+// Add more specific data functions as needed, e.g.:
+// export const getRoomTypesMasterData = () => { ... }
+// export const getParkingTypesMasterData = () => { ... }
+// etc.
 
-export const getSatyaMessageData = (name) => {
-  return new Promise((resolve, reject) => {
-    fetch(`http://192.168.1.121:3300/api/satya?name=${encodeURIComponent(name)}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => resolve(data))
-      .catch(error => {
-        console.error('Fetch error:', error);
-        reject(error);
-      });
-  });
-};
+// For now, the placeholder pages use static data. If time permits or required,
+// they can be updated to use functions like these.
+// The primary focus of this service for now is the Dashboard.
 
-console.log('✅ Mock Data Service Initialized');
+console.log('Mock Data Service Initialized'); // For debugging, to ensure file is loaded.
