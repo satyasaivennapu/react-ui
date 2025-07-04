@@ -20,21 +20,40 @@ ChartJS.register(
 );
 
 const BarChart = ({ data, options, title }) => {
+  // Make sure each month has a different color
+  const colors = [
+    '#4F46E5', '#16A34A', '#F97316', '#DC2626', '#9333EA',
+    '#0EA5E9', '#F59E0B', '#10B981', '#BE185D', '#3B82F6',
+    '#6D28D9', '#EA580C'
+  ];
+
+  // Modify data to apply individual colors
+  const customData = {
+    ...data,
+    datasets: data.datasets.map(dataset => ({
+      ...dataset,
+      backgroundColor: colors.slice(0, dataset.data.length),
+      borderRadius: 6,
+      barThickness: 28,
+      maxBarThickness: 25,
+    }))
+  };
+
   const defaultOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top',
+        display: false, // hides legend for cleaner look
       },
       title: {
-        display: true,
-        text: title || 'Bar Chart',
+        display: !!title,
+        text: title || 'Monthly Revenue',
         font: {
-          size: 18,
+          size: 16,
           weight: 'bold',
         },
-        color: '#333'
+        color: '#333',
       },
     },
     scales: {
@@ -44,7 +63,10 @@ const BarChart = ({ data, options, title }) => {
           color: 'rgba(200, 200, 200, 0.2)',
         },
         ticks: {
-          color: '#555'
+          color: '#555',
+          font: {
+            size: 12,
+          }
         }
       },
       x: {
@@ -52,19 +74,22 @@ const BarChart = ({ data, options, title }) => {
           display: false,
         },
         ticks: {
-          color: '#555'
+          color: '#555',
+          font: {
+            size: 12,
+          }
         }
       }
     },
     animation: {
-      duration: 1000,
-      easing: 'easeInOutQuart'
+      duration: 800,
+      easing: 'easeOutQuart',
     }
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 h-96"> {/* Added h-96 for default height */}
-      <Bar data={data} options={{ ...defaultOptions, ...options }} />
+    <div className="bg-white shadow-md rounded-xl p-4 h-80 sm:h-96">
+      <Bar data={customData} options={{ ...defaultOptions, ...options }} />
     </div>
   );
 };

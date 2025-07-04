@@ -60,7 +60,7 @@ const MobileLockerPage = () => {
       </div>
 
       <DataTable title="Mobile Locker Status" columns={columns} data={formattedData} />
-
+0
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} title="Add New Mobile Locker">
         <AddItemForm onSubmit={handleAddItem} onClose={handleCloseModal} />
       </Modal>

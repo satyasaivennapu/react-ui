@@ -21,18 +21,21 @@ const PieChart = ({ data, options, title }) => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'right',
+        position: 'bottom',
         labels: {
-          boxWidth: 15,
-          padding: 15,
-          color: '#555'
+          boxWidth: 12,
+          padding: 10,
+          color: '#555',
+          font: {
+            size: 12
+          }
         }
       },
       title: {
-        display: true,
-        text: title || 'Pie Chart',
+        display: !!title,
+        text: title || 'Expenses Breakdown',
         font: {
-          size: 18,
+          size: 16,
           weight: 'bold',
         },
         color: '#333'
@@ -41,11 +44,12 @@ const PieChart = ({ data, options, title }) => {
         callbacks: {
           label: function(context) {
             let label = context.label || '';
-            if (label) {
-              label += ': ';
-            }
+            if (label) label += ': ';
             if (context.parsed !== null) {
-              label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed);
+              label += new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              }).format(context.parsed);
             }
             return label;
           }
@@ -53,13 +57,14 @@ const PieChart = ({ data, options, title }) => {
       }
     },
     animation: {
-      duration: 1000,
-      easing: 'easeInOutQuart'
-    }
+      duration: 800,
+      easing: 'easeOutQuart',
+    },
+    cutout: '40%' // optional: makes it look like doughnut
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 h-96"> {/* Added h-96 for default height */}
+    <div className="bg-white shadow-md rounded-xl p-4 h-80 sm:h-96">
       <Pie data={data} options={{ ...defaultOptions, ...options }} />
     </div>
   );
