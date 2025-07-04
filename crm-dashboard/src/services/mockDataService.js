@@ -110,6 +110,45 @@ export const getLocationTypesData = () => {
   return simulateApiCall(data);
 }
 
+export const getSatyaMessageData = (name) => {
+  return new Promise((resolve, reject) => {
+    fetch(`http://192.168.1.121:3300/api/get?name=${encodeURIComponent(name)}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! staaddetus: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => resolve(data))
+      .catch(error => {
+        console.error('Fetch error:', error);
+        reject(error);
+      });
+  });
+};
+
+export const sendSatyaPostData = (payload) => {
+  return new Promise((resolve, reject) => {
+    fetch('http://192.168.1.121:3300/api/post', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => resolve(data))
+      .catch(error => {
+        console.error('Fetch POST error:', error);
+        reject(error);
+      });
+  });
+};
 // Add more specific data functions as needed, e.g.:
 // export const getRoomTypesMasterData = () => { ... }
 // export const getParkingTypesMasterData = () => { ... }

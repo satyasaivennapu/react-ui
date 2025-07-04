@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import DataTable from '../../components/UI/DataTable';
 import Modal from '../../components/UI/Modal';
 import AddItemForm from '../../components/Forms/AddItemForm';
 import { PlusCircle } from 'lucide-react';
-
+import { getSatyaMessageData, sendSatyaPostData } from '../../services/mockDataService'; // Adjust the import path as necessary
 const MobileLockerPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lockerData, setLockerData] = useState([ // Example state for table data
@@ -13,7 +13,34 @@ const MobileLockerPage = () => {
   ]);
 
   const columns = ['Locker ID', 'Name', 'Status', 'Current Location', 'Last User', 'Added Date', 'Is Active'];
+ const [getResponse, setGetResponse] = useState('');
+  const [postResponse, setPostResponse] = useState('');
 
+    useEffect(() => {
+    // Call GET API
+    getSatyaMessageData('Satya GET')
+      .then(data => {
+        console.log('GET API response:', data);
+        setGetResponse(JSON.stringify(data));
+      })
+      .catch(error => {
+        console.error('GET API error:', error);
+        setGetResponse('Failed to load GET data');
+      });
+
+    // Call POST API
+    const payload = { name: 'Satya Sai Vennapu', message: 'Hello from POST' };
+    sendSatyaPostData(payload)
+      .then(data => {
+        console.log('POST API response:', data);
+        setPostResponse(JSON.stringify(data));
+      })
+      .catch(error => {
+        console.error('POST API error:', error);
+        setPostResponse('Failed to send POST data');
+      });
+
+  }, []);
   // Format data for DataTable
   const formattedData = lockerData.map(item => ({
     'locker id': item.locker_id,
@@ -58,7 +85,7 @@ const MobileLockerPage = () => {
           Add New Mobile Locker
         </button>
       </div>
-
+     <p>getResponse = {getResponse}</p>
       <DataTable title="Mobile Locker Status" columns={columns} data={formattedData} />
 0
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} title="Add New Mobile Locker">
